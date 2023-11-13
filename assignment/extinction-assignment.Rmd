@@ -1,6 +1,6 @@
 ---
 title: "Extinctions Unit"
-author: "Your name, partner name"
+author: "Caroline Wichterman, Megna Reddy"
 maketitle: true
 output: github_document
 ---
@@ -11,9 +11,73 @@ output: github_document
 library("tidyverse")
 library("httr")
 library("jsonlite")
+library("glue")
 #library("printr")
 knitr::opts_chunk$set(comment=NA)
 ```
+
+```{r}
+base <- "https://apiv3.iucnredlist.org/api/v3"
+endpoint <- "speciescount"
+token <- "9bb4facb6d23f48efbf424bb05c0c1ef1cf6f468393bc745d42179ac4aca5fee"
+url <- glue("{base}/{endpoint}?token={token}")
+
+req <- GET(url)
+x <- content(req)
+x$speciescount
+```
+
+```{r}
+species_endpoint <- "species"
+page <- paste0("page/", 0:15)
+all_pages <- glue("{base}/{species_endpoint}/{page}?token={token}")
+```
+
+```{r}
+if(!file.exists("all_species.rds"))
+  all_species <- map(all_pages, GET)
+  write_rds(all_species,, "all_species.rds")
+}
+```
+
+```{r}
+all_species <- read_rds("all_species.rds")
+```
+
+```{r}
+codes ,- map_int(all_species, status_code)
+stop_if_not(all(codes < 400))
+```
+
+```{r}
+all_resp <- map(all_species, content, encoding = "UTF-8")
+```
+
+```{r}
+sci_name <-
+  map(all_resp, \(page) map_chr(page$result, "scientific_name"))
+
+x <- unlist(sci_name)
+length(sci_name[[4]])
+```
+
+```{r}
+```
+
+```{r}
+sci_name <-  map_chr(page0_resp$result, "scientific_name")
+category <- map_chr(page0_resp$result, "category")
+
+all_species <- tibble(sci_name, category)
+
+
+
+```
+
+```{r}
+extinct_species <- all_species |> filter(category == %in% c("CR", "EX"))
+```
+
 
 
 
