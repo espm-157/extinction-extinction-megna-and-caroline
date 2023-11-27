@@ -1,5 +1,5 @@
+![Reproducibility](https://github.com/espm-157/spatial-geospatial-megna-caroline/actions/workflows/main.yml/badge.svg)](https://github.com/espm-157/extinction-extinction-megna-and-caroline/actions/workflows/main.yml)
 
-*add gh-actions badge here*
 
 ## Team Members:
 
