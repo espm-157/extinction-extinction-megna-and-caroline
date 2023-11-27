@@ -4,7 +4,7 @@
 ## Team Members:
 
 - Megna Reddy, 14megnareddy14
-- Caroline Wichterman, 
+- Caroline Wichterman, carolinewichterman
 
 This repository is a template for your team's repository.
 
