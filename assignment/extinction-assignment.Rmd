@@ -17,6 +17,11 @@ knitr::opts_chunk$set(comment=NA)
 ```
 
 ```{r}
+download.file("https://github.com/espm-157/extinction-template/releases/download/data2.0/extinction-data.zip", "extinction-data.zip")
+unzip("extinction-data.zip")
+```
+
+```{r}
 base <- "https://apiv3.iucnredlist.org/api/v3"
 endpoint <- "speciescount"
 token <- "9bb4facb6d23f48efbf424bb05c0c1ef1cf6f468393bc745d42179ac4aca5fee"
@@ -34,19 +39,14 @@ all_pages <- glue("{base}/{species_endpoint}/{page}?token={token}")
 ```
 
 ```{r}
-if(!file.exists("all_species.rds"))
-  all_species <- map(all_pages, GET)
-  write_rds(all_species,, "all_species.rds")
+if(!file.exists("all_species.rds")) {
+  all_species <- map(all_pages, GET, .progress = TRUE)
+  
+  status <- map_int(all_species, status_code)
+  stopifnot(all(status < 400))
+  write_rds(all_species, "all_species.rds")
 }
-```
-
-```{r}
-all_species <- read_rds("all_species.rds")
-```
-
-```{r}
-codes ,- map_int(all_species, status_code)
-stop_if_not(all(codes < 400))
+ all_species <- read_rds("all_species.rds")
 ```
 
 ```{r}
@@ -55,29 +55,89 @@ all_resp <- map(all_species, content, encoding = "UTF-8")
 
 ```{r}
 sci_name <-
-  map(all_resp, \(page) map_chr(page$result, "scientific_name"))
+  map(all_resp, \(page) map_chr(page$result, "scientific_name")) |>
+  list_c()
 
-x <- unlist(sci_name)
-length(sci_name[[4]])
+category <-
+  map(all_resp, \(page) map_chr(page$result, "category")) |>
+  list_c()
+
+class <- 
+  map(all_resp, \(page) map_chr(page$result, "class_name")) |>
+  list_c()
+
+all_species <- tibble(sci_name, category, class)
 ```
 
 ```{r}
+extinct_species <-
+  all_species |>
+  filter(category == "EX")
 ```
 
 ```{r}
-sci_name <-  map_chr(page0_resp$result, "scientific_name")
-category <- map_chr(page0_resp$result, "category")
-
-all_species <- tibble(sci_name, category)
-
-
-
+ext_sci_name <- extinct_species$sci_name
+ex_urls <- glue("{base}/species/narrative/{ext_sci_name}?token={token}") |>
+  URLencode()
 ```
 
 ```{r}
-extinct_species <- all_species |> filter(category == %in% c("CR", "EX"))
+if(!file.exists("ex_narrative.rds")) {
+  ex_narrative <- map(ex_urls, GET,  .progress = TRUE)
+  
+  status <- map_int(ex_narrative, status_code)
+  stopifnot(all(status < 400))
+  
+  write_rds(ex_narrative, "ex_narrative.rds")
+}
+
+ex_narrative <- read_rds("ex_narrative.rds")
 ```
 
+```{r}
+narrative_contents <- map(ex_narrative, content)
+
+narrative_population <- map(narrative_contents, 
+                            \(x) map_chr(x$result[1], "population", .default = ""))
+
+narrative_rationale <- map(narrative_contents, \(x) x$result[[1]]$rationale)
+```
+
+```{r}
+last_seen <- narrative_population |> 
+  map_chr(str_extract, "\\d{4}") |> 
+  as.integer()
+```
+
+```{r}
+extinction_dates <- 
+  tibble(sci_name = ext_sci_name, last_seen) |> 
+  distinct()
+
+combined <- all_species |> left_join(extinction_dates)
+```
+
+```{r}
+total_sp <- combined |> 
+  filter(class %in% c("MAMMALIA", "AVES", "AMPHIBIA", "REPTILIA", "ACTINOPTERYGII")) |>
+  count(class, name = "total")
+total_sp
+```
+
+```{r}
+final_tbl <- 
+  combined |> 
+  filter(category == "EX") |>
+  filter(class %in% c("MAMMALIA", "AVES", "AMPHIBIA", "REPTILIA", "ACTINOPTERYGII")) |>
+  mutate(last_seen = replace_na(last_seen, 2023),
+         century =  str_extract(last_seen, "\\d{2}")) |>
+  count(century, class) |> 
+  left_join(total_sp) |>
+  mutate(extinction_msy = n / total * 10000) # extinctions per million-species-years
+  
+ final_tbl 
+
+```
 
 
 
