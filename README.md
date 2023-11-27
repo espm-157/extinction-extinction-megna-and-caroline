@@ -3,8 +3,8 @@
 
 ## Team Members:
 
-- full name, github handle
-- full name, github handle
+- Megna Reddy, 14megnareddy14
+- Caroline Wichterman, 
 
 This repository is a template for your team's repository.
 
