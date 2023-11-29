@@ -189,8 +189,8 @@ final_tbl <-
 
 ## Background
 
-- [Section Intro Video](https://youtu.be/QsH6ytm89GI)
-- [Ceballos et al (2015)](http://doi.org/10.1126/sciadv.1400253)
+-   [Section Intro Video](https://youtu.be/QsH6ytm89GI)
+-   [Ceballos et al (2015)](http://doi.org/10.1126/sciadv.1400253)
 
 Our focal task will be to reproduce the result from Ceballos and
 colleagues showing the recent increase in extinction rates relative to
@@ -199,52 +199,11 @@ the background rate:
 ![](https://espm-157.carlboettiger.info/img/extinctions.jpg)
 
 ``` r
-<<<<<<< HEAD
 extinction_plot <-
   ggplot(data = final_tbl, aes(x=century, y=extinction_msy, group=class, color=class)) +
   geom_line() + labs(x = "Century", y = "Cumulative Extinctions Per Millions of Species Per Century", title = "Species Extinction Over Time (14th century-Present)")
 extinction_plot
 ```
-=======
-#ggplot(data = df, aes(x = total_sp, y = extinction_dates)) + 
-  #geom_line()
-```
-
-``` r
-##birds_total <- birds <- all_species %>% 
- ##filter(class == "AVES") %>% mutate(group = "Birds")
-
-##mammal_total <- mammals <- all_species %>% 
- ##filter(class == "MAMMALIA") %>% mutate(group = "Mammals")
-
-##vert_total <- vertebrate <- all_species %>% 
- ##filter(class %in% vertebrae) %>% mutate(group = "Vertebrates")
-
-##other_total <- all_others <- all_species %>% 
- ##filter(phylum == "CHORDATA") %>% 
- ##filter(!class %in% c("MAMMALIA", "AVES")) %>% 
- ##mutate(group = "Other Vertebrates")
-```
-
-``` r
-#ggplot(data = df, aes(total_sp, extinction_dates)) + geom_point()
-```
-
-``` r
-##df %>% 
-  ##ggplot(aes(x = century), group = group, color = group) +
- ## geom_line(aes(y = extinction_msy)) +
- ## labs(title = "Cumulative Vertebrate Species as EX or EW by the IUCN 2019",
-  ##  y = 'Cumulative extinctions as % of UCN-evaluated species',
-  ##  x = "Time interval") + 
-##scale_x_discrete(labels=c("1500-1600", "1600-1700", "1700-1800", "1800-1900", "1900-2000")) +
-##scale_y_continuous(breaks = seq(0,2, by=0.2)) +
-##theme_classic() +
-##theme(text = element_text(size=10))
-```
-
-## Computational Topics
->>>>>>> e84ae943eba154c2f7ca923fb65d1c21a816f893
 
 ![](extinction-assignment_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
@@ -296,7 +255,7 @@ adaptation, and ongoing scientific research.
 
 ## Additional references:
 
-- <http://www.hhmi.org/biointeractive/biodiversity-age-humans> (Video)
-- [Barnosky et al. (2011)](http://doi.org/10.1038/nature09678)
-- [Pimm et al (2014)](http://doi.org/10.1126/science.1246752)
-- [Sandom et al (2014)](http://dx.doi.org/10.1098/rspb.2013.3254)
+-   <http://www.hhmi.org/biointeractive/biodiversity-age-humans> (Video)
+-   [Barnosky et al. (2011)](http://doi.org/10.1038/nature09678)
+-   [Pimm et al (2014)](http://doi.org/10.1126/science.1246752)
+-   [Sandom et al (2014)](http://dx.doi.org/10.1098/rspb.2013.3254)
