@@ -1,6 +1,28 @@
-Extinctions Unit
+Extinctions Over Time
 ================
 Caroline Wichterman, Megna Reddy
+
+# Measuring The Rate of Extinction of IUCN RedList Species Over Time
+
+Our aim with this project is to use the IUCN’s RedList API data to
+analyze if extinction rates have increased over time and which species
+were most affected.
+
+The species we examined in this project were Mammalia, Aves, Amphibia,
+Reptilia, and Actinopterygii. The Mammalia class represents vertebrate
+animals that are mammals. Additionally, the Aves class represents the
+birds population. The Amphibia class represents cold blooded vertebrates
+and amphibians including frogs, toads, salamanders, and newts. The
+Reptilia class includes four living clades: Crocodilia, Sphenodontia
+(tautaras), Squamata (lizards and snakes), and Testudines (turtles).
+Lastly, the Actinopterygii represents the Ray-finned fishes.
+
+We hope to explore how each class has been affected by changes in
+extinction rates and how species declines help assess the state of
+global biodiversity. In order to ensure extinction rates do not
+continuously rise, we must prioritize biodiversity conservation, reframe
+global policy surrounding animal conservation, and take into account
+ethical and aesthetic values of nature.
 
 ``` r
 download.file("https://github.com/espm-157/extinction-template/releases/download/data2.0/extinction-data.zip", "extinction-data.zip")
@@ -165,17 +187,10 @@ final_tbl <-
     19 20      MAMMALIA          53  6427         82.5  
     20 20      REPTILIA          13 10283         12.6  
 
-## Extinctions Module
-
-*Are we experiencing the sixth great extinction?*
-
-What is the current pace of extinction? Is it accelerating? How does it
-compare to background extinction rates?
-
 ## Background
 
--   [Section Intro Video](https://youtu.be/QsH6ytm89GI)
--   [Ceballos et al (2015)](http://doi.org/10.1126/sciadv.1400253)
+- [Section Intro Video](https://youtu.be/QsH6ytm89GI)
+- [Ceballos et al (2015)](http://doi.org/10.1126/sciadv.1400253)
 
 Our focal task will be to reproduce the result from Ceballos and
 colleagues showing the recent increase in extinction rates relative to
@@ -183,17 +198,64 @@ the background rate:
 
 ![](https://espm-157.carlboettiger.info/img/extinctions.jpg)
 
-## Computational Topics
+``` r
+extinction_plot <-
+  ggplot(data = final_tbl, aes(x=century, y=extinction_msy, group=class, color=class)) +
+  geom_line() + labs(x = "Century", y = "Cumulative Extinctions Per Millions of Species Per Century", title = "Species Extinction Over Time (14th century-Present)")
+extinction_plot
+```
 
--   Accessing data from a RESTful API
--   Error handling
--   JSON data format
--   Regular expressions
--   Working with missing values
+![](extinction-assignment_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+## Extinctions Module
+
+*Are we experiencing the sixth great extinction?*
+
+### What is the current pace of extinction? Is it accelerating? How does it compare to background extinction rates?
+
+The current pace of extinction is varied for the different species. The
+pace of extinction of Mammalia (vertebrate animals that are mammals) is
+on a steady, rapid increase from the 17th century on - representing an
+extreme acceleration in the last 3 centuries. Similarly, the pace of the
+Aves (birds) extinction is on an increase, however, much more extreme
+than Mammalia. The rate of extinction skyrocketed from the 19th century
+on, disrupting the mostly steady line of extinction from the 16th
+century to the beginning of the 19th century. The Aves population has
+seen the greatest extinction of all species measured in this plot. On a
+much slower pace, the Reptilia population extinction is also on the rise
+from the 19th century on. On the other hand, Actinopterygii (Ray-finned
+species) and amphibia (cold blooded vertebrates and amphibians) species
+are on a negative pace of extinction and are staying steady in
+population size, potentially even increasing.
+
+By looking at this plot and examining the data, it is clear that the
+19th century was pivotal in the pace of extinction for all 5 species.
+This correlates with the rate of expansion of the human population and
+industrialization of our world to support a growing population, as
+explored below.
+
+The rising extinction rates of mammals, birds, and reptiles that is
+shown above can be exacerbated by human-induced factors. In particular,
+the rate of extinction skyrocketed for mammals and birds in the 19th
+century which aligns with the impacts of the Industrial Revolution.
+These classes of animals were exploited for utilitarian, monetary, and
+diet purposes of humans across the world driving the accelerating
+extinction rates. On the other hand, the ray-finned fishes and
+amphibians have shown a decline in extinction which could be due to
+their unique habitats and isolated ecosystems due to their lack of
+services for humans.
+
+After analyzing extinction over centuries, it is essential to our
+well-being to prepare for future generations and prioritize biodiversity
+conservation of all living things and organisms. In order to make
+change, we must demonstrate a collaborative and focused effort across
+the globe. This includes habitat conservation and restoration,
+sustainable land development, anti-poaching measures, climate change
+adaptation, and ongoing scientific research.
 
 ## Additional references:
 
--   <http://www.hhmi.org/biointeractive/biodiversity-age-humans> (Video)
--   [Barnosky et al. (2011)](http://doi.org/10.1038/nature09678)
--   [Pimm et al (2014)](http://doi.org/10.1126/science.1246752)
--   [Sandom et al (2014)](http://dx.doi.org/10.1098/rspb.2013.3254)
+- <http://www.hhmi.org/biointeractive/biodiversity-age-humans> (Video)
+- [Barnosky et al. (2011)](http://doi.org/10.1038/nature09678)
+- [Pimm et al (2014)](http://doi.org/10.1126/science.1246752)
+- [Sandom et al (2014)](http://dx.doi.org/10.1098/rspb.2013.3254)
